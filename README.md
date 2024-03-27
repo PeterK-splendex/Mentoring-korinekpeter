@@ -1,7 +1,11 @@
-Mentor program starting from March 26
+# Mentor program at Splendex
 
-Trainee: Korinek Péter, student at Budapest Elte Ik
+Mentor program starting from March 26, in the field of web development
 
-Mentor: Kollár Márk, medior web developer at Spendex
+# Trainee 
+Korinek Péter, student at Budapest Elte Ik
 
-        Bálint Krsják, senior web developer at Spendex
+# Mentor
+Kollár Márk, medior web developer at Spendex
+
+Bálint Krsják, senior web developer at Spendex
