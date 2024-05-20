@@ -14,7 +14,7 @@ import tsImage from './cards/ts.png';
 import webpackImage from './cards/webpack.png';
 import cardback from "./cards/back.png";
 import { useNavigate } from 'react-router-dom';
-
+import Header from '../Header/Header';
 const images = [
   angularImage,
   d3Image,
@@ -30,9 +30,10 @@ const images = [
 
 const Game = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { numCards, cards ,steps, gameEnded, coverUp } = useSelector((state: { memory: MemoryState }) => state.memory);
-
+  const { numCards, cards ,steps, gameEnded, coverUp,highScore } = useSelector((state: { memory: MemoryState }) => state.memory);
+  useEffect(() => {
+    dispatch(memorySlice.actions.resetHighScore());
+  },[numCards]);
   useEffect(() => {
     dispatch(memorySlice.actions.startGame());
   }, []);
@@ -57,8 +58,8 @@ const Game = () => {
         const index = i * columns + j;
         if (index < numCards) {
           row.push(
-            <td key={index}>
-              {cards[index].isMatched ? "" : renderCard(cards[index])}
+            <td key={index}  className='card'>
+              {renderCard(cards[index])}
             </td>
           );
         } else {
@@ -71,9 +72,9 @@ const Game = () => {
     return grid;
   };
   
-  
   const renderCard = (card: Card) => {
     const handleCardClick = () => {
+      if(card.isMatched) return;
       dispatch(memorySlice.actions.flipCard(card.id));
       if (!coverUp) {
         setTimeout(() => {
@@ -81,11 +82,11 @@ const Game = () => {
         }, 500);
       }
     };
-  
+    const cardClass = card.isMatched ? 'card-image card-image-matched' : 'card-image card-image-unmatched';
     return (
       <img
+        className={cardClass}
         src={card.isFlipped ? images[card.image] : cardback}
-        alt={card.isFlipped ? `Card ${card.id}` : "Card Back"}
         onClick={handleCardClick}
       />
     );
@@ -95,21 +96,18 @@ const Game = () => {
     dispatch(memorySlice.actions.startGame());
   }
 
-  const handleBack = () => {
-    navigate('/');
-  };
-
   return (
     <div className="game">
-      <table>
+      <Header/>
+      <table className='table'>
         <tbody>
           {renderCardsGrid()}
         </tbody>
       </table>
       {gameEnded && <div className="game-over">Congratulations, you've matched all the cards!</div>}
-      <div>{steps}</div>
-      <div> <button onClick={HandleReset}>New game</button></div>
-      <div><button onClick={handleBack}>Back</button></div>
+      <div>Current tries:{steps}</div>
+      <div>Highscore: {highScore}</div>
+      <div> <button className="button" onClick={HandleReset}>Retry</button></div>
     </div>
   );
 };

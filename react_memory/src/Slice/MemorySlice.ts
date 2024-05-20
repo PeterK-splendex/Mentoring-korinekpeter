@@ -9,6 +9,7 @@ const initialState: MemoryState = {
   gameStarted: false,
   gameEnded: false,
   coverUp: false,
+  highScore:0,
 };
 
 const memorySlice = createSlice({
@@ -38,7 +39,6 @@ const memorySlice = createSlice({
         state.flippedCard = cardId;
         state.cards[cardIndex].isFlipped = true;
       } else {
-        state.steps++;
         state.cards[cardIndex].isFlipped = true;
         state.coverUp = true;
       }
@@ -51,7 +51,7 @@ const memorySlice = createSlice({
         if (newlyFlippedCardIndex !== -1 && flippedCardIndex !== -1) {
           const firstCard = state.cards[flippedCardIndex];
           const secondCard = state.cards[newlyFlippedCardIndex];
-
+          state.steps++;
           if (firstCard.image === secondCard.image) {
             state.cards[flippedCardIndex].isMatched = true;
             state.cards[newlyFlippedCardIndex].isMatched = true;
@@ -63,10 +63,14 @@ const memorySlice = createSlice({
         state.flippedCard = -1;
         if (state.cards.every(card => card.isMatched)) {
           state.gameEnded = true;
+          if(state.highScore > state.steps || state.highScore == 0) state.highScore = state.steps;
         }
     },
     setNumCards(state, action: PayloadAction<number>) {
       state.numCards = action.payload;
+    },
+    resetHighScore(state) {
+      state.highScore = 0;
     },
   },
 });

@@ -7,6 +7,7 @@ export interface MemoryState {
     gameStarted: boolean;
     gameEnded: boolean;
     coverUp : boolean;
+    highScore : number;
   }
   
   export interface Card {

@@ -15,11 +15,11 @@ const LandingPage = () => {
   };
 
   return (
-    <div className="landing-page">
-      <h1>Splendex Memory Game</h1>
+    <div className="body-landing-page">
+      <h1 className='body-title'>Splendex Memory Game</h1>
       <label>
         Deck Size
-        <select value={numCards} onChange={(e) => dispatch(memorySlice.actions.setNumCards(Number(e.target.value)))}>
+        <select className='decksizer' value={numCards} onChange={(e) => dispatch(memorySlice.actions.setNumCards(Number(e.target.value)))}>
           {[...Array(8)].map((_, index) => {
             const pairs = (index + 3) * 2;
             return (
@@ -31,7 +31,7 @@ const LandingPage = () => {
         </select>
 
       </label>
-      <button onClick={handleStartGame}>Start Game</button>
+      <button className="button" onClick={handleStartGame}>Start New Game</button>
     </div>
   );
 };
