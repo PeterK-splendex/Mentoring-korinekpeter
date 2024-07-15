@@ -1,20 +1,19 @@
 import { NavLink, useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../../store/userSlice';
-import { RootState } from '../../store/store';
-
 function Sidebar() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const role = useSelector((state: RootState) => state.user.role);
+  
 
   const handleLogout = () => {
-    dispatch(logout());
+    localStorage.removeItem('token');
     navigate('/login');
   };
 
+  const token = localStorage.getItem('token');
+  const user = token ? JSON.parse(atob(token.split('.')[1])) : { role: 'none' };
+  const { role } = user;
+
   return (
-    <div  className="bg-gray-800 h-screen w-[170px] fixed left-0 top-0">
+    <div className="bg-gray-800 h-screen w-[170px] fixed left-0 top-0">
       <nav className="mt-10">
         <ul>
           {role === 'none' && (

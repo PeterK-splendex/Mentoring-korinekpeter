@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAuthors } from './AuthorsContext';
 
 interface AuthorFormProps {
-  id?: number; // Optional id prop to determine add or edit mode
+  id?: number; 
 }
 
 const AuthorForm: React.FC<AuthorFormProps> = () => {
@@ -27,11 +27,16 @@ const AuthorForm: React.FC<AuthorFormProps> = () => {
       axios.get(`http://localhost:3000/authors/${id}`)
         .then(response => {
           const author = response.data;
+  
+          const date = new Date(author.bornDate);
+          date.setDate(date.getDate() + 1);
+          const formattedDate = date.toISOString().split('T')[0];
+  
           setFormData({
             firstName: author.firstName,
             lastName: author.lastName,
             description: author.description,
-            bornDate: new Date(author.bornDate).toISOString().split('T')[0],
+            bornDate: formattedDate,
             specializations: author.specializations.join(', '),
           });
           setLoading(false);
@@ -52,21 +57,20 @@ const AuthorForm: React.FC<AuthorFormProps> = () => {
     e.preventDefault();
     setLoading(true);
 
-    // Convert specializations string to array
     const formattedData = {
       ...formData,
-      specializations: formData.specializations.split(',').map(spec => spec.trim()), // Convert to array
+      specializations: formData.specializations.split(',').map(spec => spec.trim()),
     };
 
     const request = id
-      ? axios.put(`http://localhost:3000/authors/${id}`, formattedData) // Edit mode
-      : axios.post('http://localhost:3000/authors', formattedData); // Add mode
+      ? axios.put(`http://localhost:3000/authors/${id}`, formattedData)
+      : axios.post('http://localhost:3000/authors', formattedData);
 
     request
       .then(() => {
-        fetchAuthors(); // Fetch authors after successful add/edit
+        fetchAuthors();
         setLoading(false);
-        navigate('/authors'); // Redirect to authors list
+        navigate('/authors');
       })
       .catch(error => {
         setError(error.message);

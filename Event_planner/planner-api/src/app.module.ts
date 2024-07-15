@@ -6,7 +6,9 @@ import { UserModule } from './users/user.module';
 import { AuthorModule } from './authors/author.module';
 import { EventModule } from './events/event.module';
 import { ReactionModule } from './reaction/reaction.module';
-
+import * as dotenv from 'dotenv';
+import { AuthModule } from './auth/auth.module';
+dotenv.config();
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -22,7 +24,8 @@ import { ReactionModule } from './reaction/reaction.module';
     UserModule,
     AuthorModule,
     EventModule,
-    ReactionModule
+    ReactionModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,20 +1,29 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { register } from '../../store/userSlice';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Register = () => {
   const [isAdmin, setIsAdmin] = useState(false);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
+    const email = (document.getElementById('email') as HTMLInputElement).value;
+    const password = (document.getElementById('password') as HTMLInputElement).value;
+    const name = (document.getElementById('name') as HTMLInputElement).value;
     const role = isAdmin ? 'admin' : 'user';
-    const name = 'register name';
-    const email = 'register email';
 
-    dispatch(register({ name, email, role }));
-    navigate('/profile');
+    try {
+      const response = await axios.post('http://localhost:3000/auth/register', {
+        name,
+        email,
+        password,
+        role,
+      });
+      console.log('Registration successful:', response.data);
+      navigate('/login');
+    } catch (error) {
+      console.error('Registration failed:', error);
+    }
   };
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,9 +38,9 @@ const Register = () => {
           Email
         </label>
         <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           id="email"
           type="text"
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           placeholder="Enter your email"
         />
       </div>
@@ -40,9 +49,9 @@ const Register = () => {
           Password
         </label>
         <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           id="password"
           type="password"
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           placeholder="Enter your password"
         />
       </div>
@@ -51,17 +60,17 @@ const Register = () => {
           Name
         </label>
         <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           id="name"
           type="text"
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           placeholder="Enter your name"
         />
       </div>
       <div className="mb-4">
         <label className="flex items-center text-sm">
           <input
-            className="mr-2 leading-tight"
             type="checkbox"
+            className="mr-2 leading-tight"
             onChange={handleCheckboxChange}
           />
           <span className="text-gray-700">Register as Admin</span>

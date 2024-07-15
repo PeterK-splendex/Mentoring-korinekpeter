@@ -1,16 +1,29 @@
-import { useDispatch } from "react-redux";
-import { login } from '../../store/userSlice';
-import { useNavigate } from "react-router-dom";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Login = () => {
-  const dispatch = useDispatch();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    const name = 'login name';
-    const email = 'login email';
-    dispatch(login({ name, email, role: "user" }));
-    navigate('/profile');
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post('http://localhost:3000/auth/login', {
+        email,
+        password,
+      });
+      if(response.data == '')
+        {
+          alert("Invalid email or password");
+          return;
+        } 
+      const { access_token } = response.data;
+      localStorage.setItem('token', access_token);
+      navigate('/profile');
+    } catch (error) {
+      console.error('Login failed', error);
+    }
   };
 
   return (
@@ -25,6 +38,8 @@ const Login = () => {
           id="email"
           type="text"
           placeholder="Enter your email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
       </div>
       <div className="mb-6">
@@ -36,6 +51,8 @@ const Login = () => {
           id="password"
           type="password"
           placeholder="Enter your password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
       </div>
       <button

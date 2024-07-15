@@ -1,4 +1,3 @@
-// src/reactions/reaction.module.ts
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Reaction } from './reaction.entity';

@@ -1,12 +1,13 @@
 import React, { createContext, useState, useEffect, useContext, ReactNode } from 'react';
 import axios from 'axios';
-
+import { User } from '../users/UsersContext';
 interface Event {
   id: number;
   name: string;
   dateFrom: Date;
   dateTo: Date;
   description: string;
+  createdBy: User;
 }
 
 interface EventsContextProps {

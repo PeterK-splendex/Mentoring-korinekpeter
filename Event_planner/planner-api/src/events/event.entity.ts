@@ -20,8 +20,8 @@ export class Event {
   @Column()
   dateTo: Date;
 
-  @ManyToOne(() => User)
-  createdBy: User;
+  @ManyToOne(() => User, { onDelete: 'CASCADE' })
+  createdBy: Number;  
 
   @Column({ default: () => 'CURRENT_TIMESTAMP' })
   createdTime: Date;

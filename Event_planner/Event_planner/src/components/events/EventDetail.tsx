@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useEvents } from './EventsContext';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
 
 interface Author {
   id: number;
@@ -18,7 +16,6 @@ const EventDetail: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const event = events.find(e => e.id === Number(id));
-
   useEffect(() => {
     if (event) {
       axios.get(`http://localhost:3000/events/${event.id}/authors`)
@@ -51,6 +48,7 @@ const EventDetail: React.FC = () => {
       <p className="text-gray-700 mb-2">From: {new Date(event.dateFrom).toLocaleDateString()}</p>
       <p className="text-gray-700 mb-2">To: {new Date(event.dateTo).toLocaleDateString()}</p>
       <p className="text-gray-700 mb-2">Description: {event.description}</p>
+      <p className="text-gray-700 mb-2">Created by: {event.createdBy ? event.createdBy.name : 'Unknown'}</p>
       <h3 className="text-lg font-bold mb-2">Authors</h3>
       {authors.length > 0 ? (
         <ul className="list-disc list-inside mb-4">

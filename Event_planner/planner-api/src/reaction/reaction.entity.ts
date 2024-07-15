@@ -1,7 +1,6 @@
 import { Entity, Column, ManyToOne, JoinColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { Event } from '../events/event.entity';
 import { User } from '../users/user.entity';
-//Ez a táblázat a likeokat, dislikeokat tárolja
 @Entity()
 export class Reaction {
   @PrimaryGeneratedColumn()

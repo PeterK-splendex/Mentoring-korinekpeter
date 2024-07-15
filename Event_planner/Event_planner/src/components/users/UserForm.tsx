@@ -15,6 +15,9 @@ const UserForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const token = localStorage.getItem('token');
+  const userdata = token ? JSON.parse(atob(token.split('.')[1])) : { role: 'none' };
+  const user = userdata.id;
 
   useEffect(() => {
     if (id) {
@@ -42,7 +45,7 @@ const UserForm: React.FC = () => {
     setFormData(prevState => ({ ...prevState, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
@@ -50,16 +53,27 @@ const UserForm: React.FC = () => {
       ? axios.put(`http://localhost:3000/users/${id}`, formData)
       : axios.post('http://localhost:3000/users', formData);
 
-    request
-      .then(() => {
-        fetchUsers();
-        setLoading(false);
+    try {
+      await request;
+      fetchUsers();
+      
+      if (id && id == user) {
+        const loginResponse = await axios.post('http://localhost:3000/auth/login', {
+          email: formData.email,
+          password: formData.password,
+        });
+
+        localStorage.setItem('token', loginResponse.data.access_token);
+
+        navigate('/profile');
+      } else {
         navigate('/users');
-      })
-      .catch(error => {
-        setError(error.message);
-        setLoading(false);
-      });
+      }
+      setLoading(false);
+    } catch (error : any) {
+      setError(error.message);
+      setLoading(false);
+    }
   };
 
   if (loading) {

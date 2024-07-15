@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect, ReactNode, useContext } from 'react';
 import axios from 'axios';
 
-interface Author {
+export interface Author {
   id: number;
   firstName: string;
   lastName: string;
@@ -14,7 +14,7 @@ interface AuthorsContextProps {
   authors: Author[];
   loading: boolean;
   error: string | null;
-  fetchAuthors: () => void; // Add fetchAuthors function
+  fetchAuthors: () => void;
 }
 
 const AuthorsContext = createContext<AuthorsContextProps | undefined>(undefined);
